@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Sendsay from 'sendsay-api';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+
+  onSendRequest = async () => {
+    let sendsay = new Sendsay({ apiKey: '19mP7bRTzIrS1YFFXXJQ24qkKjOsErEqh00kn83XoZMCI0Nv1nLuI5tTXCa3gqZTH3w' });
+
+    sendsay.request({ action: 'sys.settings.get', list: ['about.id']}).then(function(res) {
+      console.log(res.list['about.id']);
+    })
+    /*
+    const req = await sendsay.request({
+      action: 'sys.settings.get',
+      list: [
+        'about.confirm',
+        'about.id',
+        'about.label.member',
+        'about.name',
+      ]
+    });
+    */
+    //console.log("App -> onSendRequest -> req=", req)
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <button onClick={this.onSendRequest}>Sendsay ->>></button>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;

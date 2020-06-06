@@ -1,0 +1,25 @@
+@import '../../../assets/styles/theme.scss';
+
+.CtrlLabel {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-bottom: 7px;
+    width: 100%;
+
+    &__text {
+        font-size: 16px;
+        line-height: 1;
+
+        &_warning {
+            color: $warning-color;
+        }
+    }
+
+    &__subtext {
+        margin-left: auto;
+        font-size: 12px;
+        line-height: 1;
+        color: $text-second-color;
+    }
+}
