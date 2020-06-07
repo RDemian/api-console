@@ -1,9 +1,13 @@
 import { TYPES } from './actions';
+import { getCookie } from '../../helpers/cookies-helpers';
+
+const SESSION_COOKIE_NAME = 'session_id';
+const session = getCookie(SESSION_COOKIE_NAME);
 
 const initialState = {
     fetching: false,
     fetchError: null,
-    isLogged: false,
+    session: session,
 }
 
 export default function reducer(state = initialState, action) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AuthForm from '../../component/form-components/auth-form';
+import { authorization } from '../../store/auth/actions';
 import './styles.scss';
 
 class LoginPage extends React.Component {
@@ -12,12 +13,19 @@ class LoginPage extends React.Component {
     static propTypes = {
         isLogged: PropTypes.bool.isRequired,
     };
+
+    onLogin = (params) => {
+        const { dispatch } = this.props;
+        dispatch(authorization(params));
+    }
     
     render() {
         return (
             <div className="LoginPage">
                 <div className="LoginPage__content">
-                    <AuthForm />
+                    <AuthForm
+                        onLogin={this.onLogin}
+                    />
                 </div>
             </div>
         )
@@ -26,7 +34,7 @@ class LoginPage extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLogged: state.auth.isLogged,
+        session: state.auth.session,
     }
 }
 

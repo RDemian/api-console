@@ -1,5 +1,6 @@
 import Sendsay from 'sendsay-api';
-let sendsay = new Sendsay({ apiKey: '19mP7bRTzIrS1YFFXXJQ24qkKjOsErEqh00kn83XoZMCI0Nv1nLuI5tTXCa3gqZTH3w' });
+import { login } from '../../api';
+//let sendsay = new Sendsay({ apiKey: '19mP7bRTzIrS1YFFXXJQ24qkKjOsErEqh00kn83XoZMCI0Nv1nLuI5tTXCa3gqZTH3w' });
 /*
     sendsay.request({ action: 'sys.settings.get', list: ['about.id']}).then(function(res) {
       console.log(res.list['about.id']);
@@ -11,7 +12,7 @@ export const TYPES = {
     AUTH_ERROR: 'AUTH_ERROR',
 }
 
-export function fetchList(params) {
+export function authorization(params) {
     return async(dispatch) => {
         dispatch({
             type: TYPES.AUTH_FETCH,
@@ -21,24 +22,24 @@ export function fetchList(params) {
             },
         })
 
-        try {
-            const list = await sendsay.request({ action: 'sys.settings.get', list: ['about.id']});
+        const result = await login(params);
+        
+        if (result.ok) {
             dispatch({
                 type: TYPES.AUTH_SUCCESS,
                 payload: {
                     fetching: false,
-                    items: list,
+                    session: result.session,
                 },
             })
-        } catch(err) {
+        } else {
             dispatch({
                 type: TYPES.AUTH_ERROR,
                 payload: {
                     fetching: false,
-                    fetchError: err,
+                    fetchError: result.err,
                 },
             })
-            console.error(err);
         }
     }
 }
