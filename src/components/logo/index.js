@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.png';
-import './style.scss';
+import './styles.scss';
 
 const Logo = () => {
     return (
@@ -10,4 +10,4 @@ const Logo = () => {
     );
 }
 
-export default Logo;
+export { Logo };

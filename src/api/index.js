@@ -2,7 +2,7 @@ import Sendsay from 'sendsay-api';
 
 const sendsay = new Sendsay();
 
-export const login = async (params) => {
+export const loginRequest = async (params) => {
     try {
         await sendsay.login(params);
         return (

@@ -19,6 +19,12 @@ export default function reducer(state = initialState, action) {
             return {...state, ...payload}
         case TYPES.AUTH_ERROR:
             return {...state, ...payload}
+        case TYPES.LOGOUT_FETCH:
+            return { ...state, ...payload }
+        case TYPES.LOGOUT_SUCCESS:
+            return { ...state, ...payload }
+        case TYPES.LOGOUT_ERROR:
+            return { ...state, ...payload }
         default:
             return state;
     }

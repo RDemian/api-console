@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CtrlLabel from '../ctrl-label';
-import CtrlInput from '../ctrl-input';
-import Button from '../../button';
+import { CtrlLabel } from '../ctrl-label';
+import { CtrlInput } from '../ctrl-input';
+import { Button } from '../../button';
 import Sendsay from 'sendsay-api';
 
 import './styles.scss';
@@ -78,6 +78,10 @@ class AuthForm extends React.Component {
     }
 
     check = () => {
+        this.sendsay.setSessionFromCookie();
+        //sendsay.setSession('secret'); 
+        console.log("AuthForm -> check -> this.sendsay", this.sendsay)
+        
         //this.sendsay.setSession(this.sendsay.session); 
         
         //const sendsay = new Sendsay({ apiKey: '19mP7bRTzIrS1YFFXXJQ24qkKjOsErEqh00kn83XoZMCI0Nv1nLuI5tTXCa3gqZTH3w' });

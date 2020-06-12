@@ -9,7 +9,6 @@ export const setCookie = (name, value, options = {}) => {
 
     options = {
       path: '/',
-      secure: true,
       ...options
     };
   
@@ -26,6 +25,7 @@ export const setCookie = (name, value, options = {}) => {
         updatedCookie += "=" + optionValue;
       }
     }
-  
+    
     document.cookie = updatedCookie;
+    
 }

@@ -22,7 +22,7 @@ const Button = ({ type, children, onClick, isLoading, disabled, ...props }) => {
 
 Button.propTypes = {
     type: PropTypes.string,
-    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
 }
@@ -34,4 +34,4 @@ Button.defaultProps = {
     children: null,
 }
 
-export default Button;
+export { Button };

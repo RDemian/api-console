@@ -2,21 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AuthForm from '../../components/form-components/auth-form';
-import { authorization } from '../../store/auth/actions';
+import { login } from '../../store/auth/actions';
 import './styles.scss';
 
 class LoginPage extends React.Component {
     static defaultProps = {
-
+        session: null,
     };
 
     static propTypes = {
-        isLogged: PropTypes.bool.isRequired,
+        session: PropTypes.string,
     };
 
     onLogin = (params) => {
         const { dispatch } = this.props;
-        dispatch(authorization(params));
+        dispatch(login(params));
     }
     
     render() {

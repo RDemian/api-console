@@ -1,10 +1,5 @@
 @import '../../assets/styles/theme.scss';
 
 .App {
-    display: flex;
-}
-
-.page {
-    padding: 20px;
-    background-color: thistle;
+    box-sizing: border-box;
 }

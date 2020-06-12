@@ -28,4 +28,4 @@ CtrlInput.defaultProps = {
     isWarning: false,
 }
 
-export default CtrlInput;
+export { CtrlInput };

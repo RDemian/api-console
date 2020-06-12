@@ -5,7 +5,7 @@ import './styles.scss';
 const CtrlLabel = ({ forId, text, subtext, isWarning }) => {
     return (
         <label 
-            for={forId}
+            htmlFor={forId}
             className={`CtrlLabel`} 
         >
             <div className={`CtrlLabel__text ${isWarning ? 'CtrlLabel__text_warning' : ''}`} >{text}</div>
@@ -28,4 +28,4 @@ CtrlLabel.defaultProps = {
     isWarning: false,
 }
 
-export default CtrlLabel;
+export { CtrlLabel };
