@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import AuthForm from '../../component/form-components/auth-form';
+import AuthForm from '../../components/form-components/auth-form';
 import { authorization } from '../../store/auth/actions';
 import './styles.scss';
 

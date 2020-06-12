@@ -39,22 +39,24 @@ class AuthForm extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = this.createState();
+        
+        const createState = () => {
+            const stateObj = {};
+            ctrlList.forEach((item) => {
+                stateObj[item.name] = {
+                    value: '',
+                    isValid: true,
+                };
+            })
+    
+            return stateObj;
+        }
+    
+        this.state = createState();
         this.sendsay = new Sendsay();
     }
 
-    createState() {
-        const stateObj = {};
-        ctrlList.forEach((item) => {
-            stateObj[item.name] = {
-                value: '',
-                isValid: true,
-            };
-        })
-
-        return stateObj;
-    }
-
+    
     onInputChange = (name, ev) => {
         this.setState({
             [name]: {

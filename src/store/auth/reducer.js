@@ -7,7 +7,7 @@ const session = getCookie(SESSION_COOKIE_NAME);
 const initialState = {
     fetching: false,
     fetchError: null,
-    session: session,
+    session: session || null,
 }
 
 export default function reducer(state = initialState, action) {
