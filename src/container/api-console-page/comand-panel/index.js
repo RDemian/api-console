@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import Button from '../../../components/button';
 import './styles.scss';
 
-class HeadPanel extends React.Component {
+class ComandPanel extends React.Component {
     render() {
         return (
-            <div className="HeadPanel">
+            <div className="ComandPanel">
                 <Button />
             </div>
         )
@@ -19,4 +19,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(HeadPanel)
+export default connect(mapStateToProps)(ComandPanel)

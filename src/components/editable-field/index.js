@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './styles.scss';
 
-class AuthForm extends React.Component {
+class EditableField extends React.Component {
     static defaultProps = {
         
     };
@@ -13,23 +13,21 @@ class AuthForm extends React.Component {
     };
 
     render() {
-        const { state } = this;
+        const { style } = this.props;
         const text = '<div>Привет</br>Димон</div>'
 
         return (
-            <form className='AuthForm' onSubmit={this.onFormSubmit}>
-                <div className='AuthForm__content'>
-                    <div
-                        className='textEdit'
-                        contentEditable
-                        dangerouslySetInnerHTML={{
-                            __html: text
-                        }}
-                    />
-                </div>
-            </form>
+            <div className='EditableField' style={style}>
+                <div
+                    className='EditableField__ctrl'
+                    contentEditable
+                    dangerouslySetInnerHTML={{
+                        __html: text
+                    }}
+                />
+            </div>
         )
     }
 }
 
-export default AuthForm;
+export { EditableField };

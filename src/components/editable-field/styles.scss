@@ -1,0 +1,11 @@
+.EditableField {
+    width: 100%;
+    height: 100%;
+
+    &__ctrl {
+        padding: 10px;
+        height: 100%;
+        border-radius: 5px;
+        border: 1px solid gray;
+    }
+}

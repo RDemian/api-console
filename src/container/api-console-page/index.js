@@ -1,13 +1,15 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeadPanel from './head-panel';
+import HistoryPanel from './history-panel';
+import RequestPanel from './request-panel';
 import { Button } from '../../components/button';
 import Sendsay from 'sendsay-api';
-//const sendsayInstance = new Sendsay();
+import './styles.scss';
 
 class ApiConsolePage extends Component {
     constructor(props) {
-        console.log("ApiConsolePage -> constructor -> props", props)
+        console.log('ApiConsolePage -> constructor -> props', props)
         super(props);
         this.sendsayInstance = new Sendsay();
         this.page = React.createRef();
@@ -20,11 +22,11 @@ class ApiConsolePage extends Component {
     check = () => {
         //const { session } = this.props;
         //this.sendsayInstance.setSession(session); //установка сессии из куки
-        //console.log("AuthForm -> check -> this.sendsay", this.sendsayInstance)
+        //console.log('AuthForm -> check -> this.sendsay', this.sendsayInstance)
         console.log(this.page);
         this.page.current.requestFullscreen();
         setTimeout(()=>{
-            console.log("ApiConsolePage -> check -> document.webkitExitFullscreen();")
+            console.log('ApiConsolePage -> check -> document.webkitExitFullscreen();')
             document.webkitExitFullscreen();
             
         }, 3000);
@@ -56,12 +58,14 @@ class ApiConsolePage extends Component {
         this.sendsayInstance.setSession(session);
 
         return (
-            <div ref={this.page} className="ApiConsolePage page">
+            <div ref={this.page} className='ApiConsolePage'>
                 <HeadPanel
                     sendsayInstance={this.sendsayInstance}
                     onFullScreenChange={this.onFullScreenChange}
                     isFullScreen={isFullScreen}
                 />
+                <HistoryPanel />
+                <RequestPanel />
                 <Button
                     onClick={this.check}
                 >
