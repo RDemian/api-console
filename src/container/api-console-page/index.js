@@ -65,12 +65,9 @@ class ApiConsolePage extends Component {
                     isFullScreen={isFullScreen}
                 />
                 <HistoryPanel />
-                <RequestPanel />
-                <Button
-                    onClick={this.check}
-                >
-                    Куки
-                </Button>
+                <RequestPanel
+                    sendsayInstance={this.sendsayInstance}
+                />
             </div>
         )
     }

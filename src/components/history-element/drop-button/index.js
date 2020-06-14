@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.scss';
 
-const DropButton = ({ onClick, actionName }) => {
+const DropButton = ({ onClick, actionName, isDestruct }) => {
     return (
         <button
             type='button'
-            className={`DropButton`}
+            className={`DropButton ${isDestruct ? 'DropButton_destruct':''}`}
             onClick={onClick}
         >
             {actionName}
@@ -17,10 +17,12 @@ const DropButton = ({ onClick, actionName }) => {
 DropButton.propTypes = {
     actionName: PropTypes.string.isRequired,
     onClick: PropTypes.func,
+    isDestruct: PropTypes.bool,
 }
 
 DropButton.defaultProps = {
     onClick: ()=>{},
+    isDestruct: false,
 }
 
 export { DropButton };

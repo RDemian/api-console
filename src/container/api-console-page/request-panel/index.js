@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setCookie, getCookie } from '../../../helpers/cookies-helpers';
 import { EditableField } from '../../../components/editable-field';
+import { CommandPanel } from './command-panel';
+import { isValidJson, jsonFormating, clearHTMLTags } from '../../../helpers/json-helpers';
 import './styles.scss';
 
-const WIDTH_KOEFF_COOKIE = 'panel_width_koeff';
-const HOUR_COUNT = 8760;
-const MAX_AGE = 3600 * HOUR_COUNT;
+const PANEL_WIDTH_KOEFF = 'panel_width_koeff';
+
 class RequestPanel extends React.Component {
     leftFieldRef = React.createRef();
     rightFieldRef = React.createRef();
@@ -15,10 +16,13 @@ class RequestPanel extends React.Component {
     prevClientX = null;
     state = {
         isDrag: false,
+        currContent: '',
+        formatText: '{"action":"pong"}',
+        isWarning: false,
     }
 
     componentDidMount() {
-        const koeff = getCookie(WIDTH_KOEFF_COOKIE);
+        const koeff = localStorage.getItem(PANEL_WIDTH_KOEFF);
         this.setWidthByKoeff(koeff);
     }
 
@@ -44,8 +48,7 @@ class RequestPanel extends React.Component {
         const leftField = this.leftFieldRef.current;
         const rightField = this.rightFieldRef.current;
         const koeff = Math.round((rightField.offsetWidth / leftField.offsetWidth * 100)) / 100;
-
-        setCookie(WIDTH_KOEFF_COOKIE, koeff, { 'max-age': MAX_AGE });
+        localStorage.setItem(PANEL_WIDTH_KOEFF, koeff);
     }
 
     onStartDrag = (ev) => {
@@ -88,7 +91,50 @@ class RequestPanel extends React.Component {
         }
     }
 
+
+    onSendAction = async() => {
+        const { currContent } = this.state;
+        const { sendsayInstance } = this.props;
+
+        if (isValidJson(currContent)) {
+            try {
+                const result = await sendsayInstance.request(JSON.parse(currContent));
+                console.log("RequestPanel -> onSendAction -> result=", result)
+            } catch(err) {
+                console.log("RequestPanel -> onSendAction -> err=", err)
+            }
+        } else {
+            this.setState({
+                isWarning: true,
+            });
+        }
+    }
+
+    onValueChange = (ev) => {
+        const currContent = clearHTMLTags(ev.target.innerHTML);
+        this.setState({
+            currContent,
+            isWarning: false,
+        })
+    }
+
+    onFormating = () => {
+        const { currContent } = this.state;
+        
+        if (isValidJson(currContent)) {
+            const result = jsonFormating(currContent)
+            this.setState(state => ({
+                formatText: result,
+            }));
+        } else {
+            this.setState({
+                isWarning: true,
+            });
+        }
+    }
+
     render() {
+        const { formatText, isWarning } = this.state;
         return (
             <div className="RequestPanel">
                 <div
@@ -99,13 +145,28 @@ class RequestPanel extends React.Component {
                     onMouseLeave={this.onEndDrag}
                 >
                     <div className="RequestPanel__left-panel" ref={this.leftFieldRef}>
-                        <EditableField/>
+                        <div className="RequestPanel__field-name">Запрос:</div>
+                        <EditableField
+                            isEditable
+                            onValueChange={this.onValueChange}
+                            innerText={formatText}
+                            isWarning={isWarning}
+                        />
                     </div>
-                    <div className="RequestPanel__editor-range" ref={this.editorRangeRef} onMouseDown={this.onStartDrag}>*</div>
+
+                    <div className="RequestPanel__editor-range" ref={this.editorRangeRef} onMouseDown={this.onStartDrag}>
+                        <img src={'/images/dots.png'} width='6' height='22' alt='' />
+                    </div>
+
                     <div className="RequestPanel__right-panel" ref={this.rightFieldRef}>
-                        <EditableField/>
+                        <div className="RequestPanel__field-name">Ответ:</div>
+                        <EditableField />
                     </div>
                 </div>
+                <CommandPanel
+                    onSendAction={this.onSendAction}
+                    onFormating={this.onFormating}
+                />
             </div>
         )
     }

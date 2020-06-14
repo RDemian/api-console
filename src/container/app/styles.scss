@@ -3,4 +3,6 @@
 .App {
     box-sizing: border-box;
     height: 100vh;
+    overflow: hidden;
+    color: $text-prime-color;
 }

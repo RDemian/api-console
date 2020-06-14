@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.scss';
 
-const HistoryButton = ({ onClick, actionName }) => {
+const HistoryButton = ({ onClick, actionName, isWrong }) => {
     return (
         <button
             type='button'
-            className={`HistoryButton`}
+            className={`HistoryButton ${isWrong ? 'HistoryButton_wrong':''}`}
             onClick={onClick}
         >
             {actionName}

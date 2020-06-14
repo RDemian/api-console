@@ -15,7 +15,7 @@ export function getUserData(sendsayInstance) {
         })
 
         try {
-            const result = await sendsayInstance.request({ action: 'pong',});
+            const result = await sendsayInstance.request({ "action": "pong" });
             dispatch({
                 type: TYPES.USER_SUCCESS,
                 payload: {

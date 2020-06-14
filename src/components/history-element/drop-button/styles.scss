@@ -1,13 +1,25 @@
 @import '../../../assets/styles/theme.scss';
 
-.HistoryButton {
-    padding: 7px 5px 9px;
+.DropButton {
+    width: 100%;
+    padding: 11px 5px 13px;
     font-family: inherit;
     font-size: 16px;
     line-height: 1;
+    color: $text-prime-color;
     border: none;
     outline: none;
-    border-radius: 5px;
-    background: $background-second-color;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: $background-second-color;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $element-background;
+        color: $text-light-color;
+    }
+
+    &_destruct {
+        &:hover {
+            background-color: $wrong-color;
+        }
+    }
 }

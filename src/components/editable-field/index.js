@@ -12,19 +12,31 @@ class EditableField extends React.Component {
         
     };
 
+    onChange(ev) {
+        console.log("EditableField -> onChange -> onChange", ev.target.innerHTML);
+    }
+
+    renderInner(innerText) {
+        const { isEditable, onValueChange } = this.props;
+        return (
+            <div
+                className='EditableField__ctrl'
+                contentEditable={isEditable}
+                onInput={onValueChange}
+                dangerouslySetInnerHTML={{
+                    __html: innerText
+                }}
+            />
+        )
+    }
+
     render() {
-        const { style } = this.props;
-        const text = '<div>Привет</br>Димон</div>'
+        const { isWarning, innerText } = this.props;
+        const text = '<div>Привет<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Димон</span></div>'
 
         return (
-            <div className='EditableField' style={style}>
-                <div
-                    className='EditableField__ctrl'
-                    contentEditable
-                    dangerouslySetInnerHTML={{
-                        __html: text
-                    }}
-                />
+            <div className={`EditableField ${isWarning ? 'EditableField_warning':''}`}>
+                {this.renderInner(innerText)}
             </div>
         )
     }
