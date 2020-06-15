@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import HeadPanel from './head-panel';
 import HistoryPanel from './history-panel';
 import RequestPanel from './request-panel';
-import { Button } from '../../components/button';
 import Sendsay from 'sendsay-api';
 import './styles.scss';
 

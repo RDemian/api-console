@@ -6,6 +6,7 @@
     flex-direction: column;
     padding: 10px;
     width: 100%;
+    height: auto;
     background-color: $background-second-color;
 
     &__editor {
@@ -37,6 +38,7 @@
         cursor: col-resize;
     }
     &__field-name {
+        flex: 0 0 auto;
         margin-bottom: 5px;
         font-size: 12px;
         line-height: 1;

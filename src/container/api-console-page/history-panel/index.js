@@ -1,80 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { HistoryElement } from '../../../components/history-element';
+import HistoryElement from '../../../components/history-element';
 import { IconButton } from '../../../components/icon-button';
+import { setRequestHistory } from '../../../store/requests/actions';
 import { ReactComponent as IconCross } from '../../../assets/image/svg/icon-cross.svg';
 import './styles.scss';
 
-const actions = [
-    {
-        id: 1,
-        name: 'pong',
-        ok: true,
-    },
-    {
-        id: 2,
-        name: 'sys.settings.get',
-        ok: false,
-    },
-    {
-        id: 3,
-        name: 'sys.settings.get',
-        ok: true,
-    },
-    {
-        id: 4,
-        name: 'track.get',
-        ok: false,
-    },
-    {
-        id: 5,
-        name: 'track.get',
-        ok: true,
-    },
-    {
-        id: 6,
-        name: 'pong',
-        ok: true,
-    },
-    {
-        id: 7,
-        name: 'sys.settings.get',
-        ok: false,
-    },
-    {
-        id: 8,
-        name: 'sys.settings.get',
-        ok: true,
-    },
-    {
-        id: 9,
-        name: 'track.get',
-        ok: false,
-    },
-    {
-        id: 10,
-        name: 'track.get',
-        ok: true,
-    },
-    {
-        id: 11,
-        name: 'sys.settings.get',
-        ok: true,
-    },
-    {
-        id: 12,
-        name: 'track.get',
-        ok: false,
-    },
-    {
-        id: 13,
-        name: 'track.get',
-        ok: true,
-    },
-]
-
 class HystoryPanel extends Component {
     lisfWrapRef = React.createRef();
+
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(setRequestHistory());
+    }
+
     onListWheel = (event) => {
         const lisfWrap = this.lisfWrapRef.current;
         lisfWrap.scrollLeft += event.deltaY;
@@ -82,18 +21,25 @@ class HystoryPanel extends Component {
 
     onHistoryClear = () => {}
 
+    onCopy = () => {}
+    onExecute = () => {}
+    onDelete = () => {}
+
     render() {
+        const { requestActions } = this.props;
         return (
             <div className="HystoryPanel">
                 <div className="HystoryPanel__list-wrap" ref={this.lisfWrapRef}>
                     <ul className="HystoryPanel__list" onWheel={this.onListWheel}>
-                        {actions.map( action => {
+                        {requestActions.map( (request, index) => {
                             return (
-                                <li className="HystoryPanel__item">
+                                <li key={index} className="HystoryPanel__item">
                                     <HistoryElement
-                                        key={action.id}
-                                        actionName={action.name}
-                                        actionOk={action.ok}
+                                        actionName={request.action}
+                                        actionOk={request.ok}
+                                        onCopy={this.onCopy}
+                                        onExecute={this.onExecute}
+                                        onDelete={this.onDelete}
                                     />
                                 </li>
                             )
@@ -113,7 +59,7 @@ class HystoryPanel extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.auth.session,
+        requestActions: state.requests.actions,
     }
 }
 

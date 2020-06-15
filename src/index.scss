@@ -1,5 +1,13 @@
 @import './assets/styles/theme.scss';
 
+@font-face {
+  font-family: "FiraCode";
+  font-weight: normal;
+  font-style: normal;
+  font-display: auto;
+  src: url("../src/assets/fonts/fira-code/FiraCode-Regular.woff2");
+}
+
 * {
   box-sizing: border-box;
 }

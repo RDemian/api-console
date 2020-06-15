@@ -1,12 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setCookie, getCookie } from '../../../helpers/cookies-helpers';
-import { EditableField } from '../../../components/editable-field';
+import isEmpty from 'lodash/isEmpty';
 import { CommandPanel } from './command-panel';
-import { isValidJson, jsonFormating, clearHTMLTags } from '../../../helpers/json-helpers';
+import { EditableField } from '../../../components/editable-field';
+import { sendRequest } from '../../../store/requests/actions';
+import { setCookie, getCookie } from '../../../helpers/cookies-helpers';
+import { isValidJson, jsonFormating, clearHTMLTags, delSpaces } from '../../../helpers/json-helpers';
 import './styles.scss';
 
-const PANEL_WIDTH_KOEFF = 'panel_width_koeff';
+//const PANEL_WIDTH_KOEFF = 'panel_width_koeff';
+const WIDTH_KOEFF_COOKIE = 'panel_width_koeff';
+const HOUR_COUNT = 8760;
+const MAX_AGE = 3600 * HOUR_COUNT;
 
 class RequestPanel extends React.Component {
     leftFieldRef = React.createRef();
@@ -22,7 +27,8 @@ class RequestPanel extends React.Component {
     }
 
     componentDidMount() {
-        const koeff = localStorage.getItem(PANEL_WIDTH_KOEFF);
+        //const koeff = localStorage.getItem(PANEL_WIDTH_KOEFF);
+        const koeff = getCookie(WIDTH_KOEFF_COOKIE);
         this.setWidthByKoeff(koeff);
     }
 
@@ -48,7 +54,8 @@ class RequestPanel extends React.Component {
         const leftField = this.leftFieldRef.current;
         const rightField = this.rightFieldRef.current;
         const koeff = Math.round((rightField.offsetWidth / leftField.offsetWidth * 100)) / 100;
-        localStorage.setItem(PANEL_WIDTH_KOEFF, koeff);
+        //localStorage.setItem(PANEL_WIDTH_KOEFF, koeff);
+        setCookie(WIDTH_KOEFF_COOKIE, koeff, { 'max-age': MAX_AGE });
     }
 
     onStartDrag = (ev) => {
@@ -94,12 +101,14 @@ class RequestPanel extends React.Component {
 
     onSendAction = async() => {
         const { currContent } = this.state;
-        const { sendsayInstance } = this.props;
+        const { sendsayInstance, dispatch } = this.props;
 
         if (isValidJson(currContent)) {
             try {
-                const result = await sendsayInstance.request(JSON.parse(currContent));
-                console.log("RequestPanel -> onSendAction -> result=", result)
+                //const result = await sendsayInstance.request(JSON.parse(currContent));
+                const requestParams = JSON.parse(currContent);
+                console.log("RequestPanel -> onSendAction -> requestParams=", requestParams)
+                dispatch(sendRequest(sendsayInstance, requestParams));
             } catch(err) {
                 console.log("RequestPanel -> onSendAction -> err=", err)
             }
@@ -111,7 +120,7 @@ class RequestPanel extends React.Component {
     }
 
     onValueChange = (ev) => {
-        const currContent = clearHTMLTags(ev.target.innerHTML);
+        const currContent = delSpaces(clearHTMLTags(ev.target.innerHTML));
         this.setState({
             currContent,
             isWarning: false,
@@ -134,7 +143,9 @@ class RequestPanel extends React.Component {
     }
 
     render() {
+        const { lastResponse } = this.props;
         const { formatText, isWarning } = this.state;
+        
         return (
             <div className="RequestPanel">
                 <div
@@ -160,7 +171,9 @@ class RequestPanel extends React.Component {
 
                     <div className="RequestPanel__right-panel" ref={this.rightFieldRef}>
                         <div className="RequestPanel__field-name">Ответ:</div>
-                        <EditableField />
+                        <EditableField
+                            innerText={isEmpty(lastResponse) ? '' : jsonFormating(JSON.stringify(lastResponse))}
+                        />
                     </div>
                 </div>
                 <CommandPanel
@@ -174,7 +187,7 @@ class RequestPanel extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        session: state.auth.session,
+        lastResponse: state.requests.lastResponse,
     }
 }
 
