@@ -9,8 +9,8 @@ export const isValidJson = (str) => {
     }
 }
 
-export const jsonFormating = (string) => {
-    const stringArr = string.replace(/[{}]/gi, '').trim().toLowerCase().split(',');
+export const formatingByDisplay = (string) => {
+    const stringArr = string.trim().replace(/^\{|\}(?: |$)/gi, '').trim().split(',');
     const resultString = stringArr.reduce((prev, curr, index) => {
         const isLats = index === (stringArr.length -1);
         return `${prev} <div>&nbsp;&nbsp;&nbsp;&nbsp;${curr.trim().replace(':', ':&nbsp;&nbsp;')}${!isLats ? ',':''}</div>`

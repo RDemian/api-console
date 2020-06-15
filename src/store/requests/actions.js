@@ -3,6 +3,8 @@ export const STORAGE_HISTORY_NAME = 'action_history';
 
 export const TYPES = {
     REQUEST_HISTORY_SET: 'REQUEST_HISTORY_SET',
+    REQUEST_HISTORY_CLEAR: 'REQUEST_HISTORY_CLEAR',
+    REQUEST_HISTORY_DELETE: 'REQUEST_HISTORY_DELETE',
     REQUEST_FETCH: 'REQUEST_FETCH',
     REQUEST_SUCCESS: 'REQUEST_SUCCESS',
     REQUEST_ERROR: 'REQUEST_ERROR',
@@ -40,6 +42,7 @@ export function sendRequest(sendsayInstance, params) {
             })
         } catch(err) {
             params.ok = false;
+            params.err = err.id;
             dispatch({
                 type: TYPES.REQUEST_ERROR,
                 payload: {
@@ -52,6 +55,36 @@ export function sendRequest(sendsayInstance, params) {
         }
 
         localStorage.setItem(STORAGE_HISTORY_NAME, JSON.stringify(newActions));
+    }
+}
+
+export function deleteRequestFromHistory(id) {
+    return async (dispatch, getState) => {
+        const { requests } = getState();
+        const newActions = requests.actions.filter((_, index) => index !== id);
+        
+        dispatch({
+            type: TYPES.REQUEST_HISTORY_DELETE,
+            payload: {
+                actions: newActions,
+            },
+        })
+
+        localStorage.setItem(STORAGE_HISTORY_NAME, JSON.stringify(newActions));
+    }
+}
+
+export function clearRequestHistory() {
+    return async (dispatch) => {
+        dispatch({
+            type: TYPES.REQUEST_HISTORY_CLEAR,
+            payload: {
+                actions: [],
+                lastResponse: {},
+            },
+        })
+
+        localStorage.setItem(STORAGE_HISTORY_NAME, JSON.stringify([]));
     }
 }
 

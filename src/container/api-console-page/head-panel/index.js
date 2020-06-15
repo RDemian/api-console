@@ -11,13 +11,14 @@ import './styles.scss';
 
 class HeadPanel extends React.Component {
     componentDidMount = async() => {
-        const { dispatch, sendsayInstance } = this.props;
+        const { dispatch, sendsayInstance, session } = this.props;
+        sendsayInstance.setSession(session);
         dispatch(getUserData(sendsayInstance));
     }
 
     onLogout = () => {
-        console.log("HeadPanel -> onLogout -> onLogout")
-        const { dispatch, sendsayInstance } = this.props;
+        const { dispatch, sendsayInstance, session } = this.props;
+        sendsayInstance.setSession(session);
         dispatch(logout(sendsayInstance));
     }
 
@@ -53,6 +54,7 @@ class HeadPanel extends React.Component {
 const mapStateToProps = (state) => {
     return {
         user: state.user,
+        session: state.auth.session,
     }
 }
 

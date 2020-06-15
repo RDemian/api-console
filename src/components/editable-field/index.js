@@ -1,25 +1,18 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-
 import './styles.scss';
 
-class EditableField extends React.Component {
-    static defaultProps = {
-        
-    };
+const EditableField = ({ isWarning, innerText, isEditable, onValueChange, editFieldRef }) => {
+    const _changeValue = useCallback(() => {onValueChange()}, []);
 
-    static propTypes = {
-        
-    };
+    useEffect(() => {
+        _changeValue();
+    }, [innerText, _changeValue]);
 
-    onChange(ev) {
-        console.log("EditableField -> onChange -> onChange", ev.target.innerHTML);
-    }
-
-    renderInner(innerText) {
-        const { isEditable, onValueChange } = this.props;
-        return (
+    return (
+        <div className={`EditableField ${isWarning ? 'EditableField_warning':''}`}>
             <div
+                ref={editFieldRef}
                 className='EditableField__ctrl'
                 contentEditable={isEditable}
                 onInput={onValueChange}
@@ -27,19 +20,24 @@ class EditableField extends React.Component {
                     __html: innerText
                 }}
             />
-        )
-    }
+        </div>
+    )
+}
 
-    render() {
-        const { isWarning, innerText } = this.props;
-        const text = '<div>Привет<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Димон</span></div>'
+EditableField.defaultProps = {
+    onValueChange: ()=>{},
+    isWarning: false,
+    innerText: '',
+    isEditable: true,
+    editFieldRef: null,
+}
 
-        return (
-            <div className={`EditableField ${isWarning ? 'EditableField_warning':''}`}>
-                {this.renderInner(innerText)}
-            </div>
-        )
-    }
+EditableField.propTypes = {
+    onValueChange: PropTypes.func,
+    isWarning: PropTypes.bool,
+    innerText: PropTypes.string,
+    isEditable: PropTypes.bool,
+    editFieldRef: PropTypes.object,
 }
 
 export { EditableField };

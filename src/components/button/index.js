@@ -12,7 +12,7 @@ const Button = ({ type, children, onClick, isLoading, disabled, ...props }) => {
             disabled={isLoading || disabled}
             {...props}
         >
-            {!isLoading && children}
+            {children}
             {isLoading &&
                 <img className='Button__img' src={loader} width='24' height='24' alt='loader'/>
             }

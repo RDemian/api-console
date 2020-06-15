@@ -7,11 +7,17 @@
 
     &__content {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         margin: auto;
         max-width: 520px;
         width: 100%;
         height: 100vh;
+    }
+
+    &__form-wrap {
+        margin: 20px 0;
+        width: 100%;
     }
 }

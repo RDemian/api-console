@@ -3,32 +3,26 @@ import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { CommandPanel } from './command-panel';
 import { EditableField } from '../../../components/editable-field';
-import { sendRequest } from '../../../store/requests/actions';
-import { setCookie, getCookie } from '../../../helpers/cookies-helpers';
-import { isValidJson, jsonFormating, clearHTMLTags, delSpaces } from '../../../helpers/json-helpers';
+import { isValidJson, formatingByDisplay, clearHTMLTags, delSpaces } from '../../../helpers/json-helpers';
 import './styles.scss';
 
-//const PANEL_WIDTH_KOEFF = 'panel_width_koeff';
-const WIDTH_KOEFF_COOKIE = 'panel_width_koeff';
-const HOUR_COUNT = 8760;
-const MAX_AGE = 3600 * HOUR_COUNT;
+const PANEL_WIDTH_KOEFF = 'panel_width_koeff';
 
 class RequestPanel extends React.Component {
     leftFieldRef = React.createRef();
     rightFieldRef = React.createRef();
     editorRef = React.createRef();
     editorRangeRef = React.createRef();
+    editFieldRef = React.createRef();
     prevClientX = null;
     state = {
         isDrag: false,
         currContent: '',
-        formatText: '{"action":"pong"}',
         isWarning: false,
     }
 
     componentDidMount() {
-        //const koeff = localStorage.getItem(PANEL_WIDTH_KOEFF);
-        const koeff = getCookie(WIDTH_KOEFF_COOKIE);
+        const koeff = localStorage.getItem(PANEL_WIDTH_KOEFF);
         this.setWidthByKoeff(koeff);
     }
 
@@ -54,8 +48,7 @@ class RequestPanel extends React.Component {
         const leftField = this.leftFieldRef.current;
         const rightField = this.rightFieldRef.current;
         const koeff = Math.round((rightField.offsetWidth / leftField.offsetWidth * 100)) / 100;
-        //localStorage.setItem(PANEL_WIDTH_KOEFF, koeff);
-        setCookie(WIDTH_KOEFF_COOKIE, koeff, { 'max-age': MAX_AGE });
+        localStorage.setItem(PANEL_WIDTH_KOEFF, koeff);
     }
 
     onStartDrag = (ev) => {
@@ -98,29 +91,9 @@ class RequestPanel extends React.Component {
         }
     }
 
-
-    onSendAction = async() => {
-        const { currContent } = this.state;
-        const { sendsayInstance, dispatch } = this.props;
-
-        if (isValidJson(currContent)) {
-            try {
-                //const result = await sendsayInstance.request(JSON.parse(currContent));
-                const requestParams = JSON.parse(currContent);
-                console.log("RequestPanel -> onSendAction -> requestParams=", requestParams)
-                dispatch(sendRequest(sendsayInstance, requestParams));
-            } catch(err) {
-                console.log("RequestPanel -> onSendAction -> err=", err)
-            }
-        } else {
-            this.setState({
-                isWarning: true,
-            });
-        }
-    }
-
     onValueChange = (ev) => {
-        const currContent = delSpaces(clearHTMLTags(ev.target.innerHTML));
+        const editField = this.editFieldRef?.current?.innerHTML;
+        const currContent = delSpaces(clearHTMLTags(editField));
         this.setState({
             currContent,
             isWarning: false,
@@ -128,13 +101,24 @@ class RequestPanel extends React.Component {
     }
 
     onFormating = () => {
+        const { onChangeDispayingText} = this.props;
         const { currContent } = this.state;
-        
+
         if (isValidJson(currContent)) {
-            const result = jsonFormating(currContent)
-            this.setState(state => ({
-                formatText: result,
-            }));
+            onChangeDispayingText(currContent);
+        } else {
+            this.setState({
+                isWarning: true,
+            });
+        }
+    }
+
+    sendActionHandler = () => {
+        const { onSendAction } = this.props;
+        const { currContent } = this.state;
+
+        if (isValidJson(currContent)) {
+            onSendAction(currContent);
         } else {
             this.setState({
                 isWarning: true,
@@ -143,8 +127,8 @@ class RequestPanel extends React.Component {
     }
 
     render() {
-        const { lastResponse } = this.props;
-        const { formatText, isWarning } = this.state;
+        const { displayingText, lastResponse, fetching } = this.props;
+        const { isWarning } = this.state;
         
         return (
             <div className="RequestPanel">
@@ -158,9 +142,9 @@ class RequestPanel extends React.Component {
                     <div className="RequestPanel__left-panel" ref={this.leftFieldRef}>
                         <div className="RequestPanel__field-name">Запрос:</div>
                         <EditableField
-                            isEditable
+                            editFieldRef={this.editFieldRef}
                             onValueChange={this.onValueChange}
-                            innerText={formatText}
+                            innerText={displayingText}
                             isWarning={isWarning}
                         />
                     </div>
@@ -172,13 +156,15 @@ class RequestPanel extends React.Component {
                     <div className="RequestPanel__right-panel" ref={this.rightFieldRef}>
                         <div className="RequestPanel__field-name">Ответ:</div>
                         <EditableField
-                            innerText={isEmpty(lastResponse) ? '' : jsonFormating(JSON.stringify(lastResponse))}
+                            isEditable={false}
+                            innerText={isEmpty(lastResponse) ? '' : formatingByDisplay(JSON.stringify(lastResponse))}
                         />
                     </div>
                 </div>
                 <CommandPanel
-                    onSendAction={this.onSendAction}
+                    onSendAction={this.sendActionHandler}
                     onFormating={this.onFormating}
+                    isLoading={fetching}
                 />
             </div>
         )
@@ -188,6 +174,7 @@ class RequestPanel extends React.Component {
 const mapStateToProps = (state) => {
     return {
         lastResponse: state.requests.lastResponse,
+        fetching: state.requests.fetching,
     }
 }
 

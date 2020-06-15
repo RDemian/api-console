@@ -31,10 +31,12 @@ const ctrlList = [
 class AuthForm extends React.Component {
     static propTypes = {
         onLogin: PropTypes.func,
+        fetching: PropTypes.bool,
     };
 
     static defaultProps = {
         onLogin: () => {},
+        fetching: false,
     };
 
     constructor(props) {
@@ -56,6 +58,31 @@ class AuthForm extends React.Component {
         this.sendsay = new Sendsay();
     }
 
+    isLoginValid(value) {
+        console.log("AuthForm -> isLoginValid -> value=", value)
+        const reg = /^[a-zA-Z0-9@\_\.]+$/;
+        const res = reg.test(value);
+        console.log("AuthForm -> isLoginValid -> res=", res)
+        this.setState(state=>({
+            login: {
+                value: state.login.value,
+                isValid: res,
+            }
+        }))
+        return res;
+    }
+
+    isPasswordValid(value) {
+        const reg = /^[a-zA-Z0-9-\_\.\ ]+$/;
+        const res = reg.test(value);
+        this.setState(state => ({
+            password: {
+                value: state.password.value,
+                isValid: res,
+            }
+        }))
+        return res;
+    }
     
     onInputChange = (name, ev) => {
         this.setState({
@@ -70,77 +97,33 @@ class AuthForm extends React.Component {
         ev.preventDefault();
         const { login, sublogin, password } = this.state;
         const { onLogin } = this.props;
-        onLogin({
-            login: 'rdmniko@gmail.com',
-            sublogin: '',
-            password: 'Sends-123',
-        });
-    }
-
-    check = () => {
-        this.sendsay.setSessionFromCookie();
-        //sendsay.setSession('secret'); 
-        console.log("AuthForm -> check -> this.sendsay", this.sendsay)
-        
-        //this.sendsay.setSession(this.sendsay.session); 
-        
-        //const sendsay = new Sendsay({ apiKey: '19mP7bRTzIrS1YFFXXJQ24qkKjOsErEqh00kn83XoZMCI0Nv1nLuI5tTXCa3gqZTH3w' });
-        /*
-        const sendsay = new Sendsay({
-            auth: {
-                login: 'rdmniko@gmail.com',
-                password: 'Sends-123',
-                password: 'Rdmitriy-222',
-            }
-        });
-        
-        sendsay.setSessionFromCookie();
-        sendsay.request({ action: 'sys.user.list' })
-            .then(function(res) {
-                console.log(res.list['about.id']);
-            })
-        */
-        
-/*
-        await this.sendsay.login({
-            login: 'rdmniko@gmail.com',
-            sublogin: '',
-            password: 'Sends-1231',
-        });
-*/
-        //sendsay.setSessionFromCookie('cookie_rdn');
-        
-       /*
-        const resp1 = await fetch('https://api.sendsay.ru/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify({
-                apiversion:100,
-                json:1,
-                action: 'login',
-                login: 'rdmniko@gmail.com',
-                password: 'Sends-123',  
-            })
-        });*/
-        //console.log("AuthForm -> onFormSubmit -> resp==", this.sendsay.getRequestData())
-        //console.log("AuthForm -> onFormSubmit -> resp==", this.sendsay.getUsername())
-        //console.log(document.cookie);
-        //const cook = getCookie('sendsay_session')
-        //console.log("AuthForm -> check -> cook=", cook)
-     /*   this.sendsay.request({ action: 'sys.settings.get', list: ['about.id']}).then(function(res) {
-            console.log(res);
-        })*/
+        const isLoginValid = this.isLoginValid(login.value);
+        const isPasswordValid = this.isPasswordValid(password.value);
+        if (isLoginValid && isPasswordValid) {
+            onLogin({
+                login: login.value,
+                sublogin: sublogin.value,
+                password: password.value,
+            });
+        }
     }
 
     render() {
+        const { fetching, fetchError } = this.props;
         const { state } = this;
 
         return (
             <form className='AuthForm' onSubmit={this.onFormSubmit}>
                 <div className='AuthForm__content'>
                     <h1 className='AuthForm__title'>API-консолька</h1>
+
+                    {fetchError &&
+                        <div className='AuthForm__error'>
+                            <div className='AuthForm__error-title'>Вход не вышел</div>
+                            <div className='AuthForm__error-desc'>{`id: ${fetchError.id}, explain: ${fetchError.explain}`}</div>
+                        </div>
+                    }
+
                     {ctrlList.map((item, index)=>{
                         return (
                             <div key={index} className='AuthForm__ctrl-wrap'>
@@ -162,13 +145,9 @@ class AuthForm extends React.Component {
                     })}
                     <Button
                         type='submit'
+                        isLoading={fetching}
                     >
                         Войти
-                    </Button>
-                    <Button
-                        onClick={this.check}
-                    >
-                        Куки
                     </Button>
                 </div>
             </form>

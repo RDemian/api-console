@@ -13,6 +13,8 @@
     }
 
     &__ctrl {
+        height: auto;
+        min-height: 100%;
         padding: 10px;
         font-family: 'FiraCode', sans-serif;
         font-weight: normal;

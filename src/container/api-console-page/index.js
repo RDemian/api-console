@@ -3,32 +3,46 @@ import { connect } from 'react-redux';
 import HeadPanel from './head-panel';
 import HistoryPanel from './history-panel';
 import RequestPanel from './request-panel';
+import { sendRequest } from '../../store/requests/actions';
+import { isValidJson, formatingByDisplay } from '../../helpers/json-helpers';
 import Sendsay from 'sendsay-api';
 import './styles.scss';
 
 class ApiConsolePage extends Component {
     constructor(props) {
-        console.log('ApiConsolePage -> constructor -> props', props)
         super(props);
         this.sendsayInstance = new Sendsay();
         this.page = React.createRef();
 
         this.state = {
             isFullScreen: false,
+            displayingText: '',
         }
     }
-    
-    check = () => {
-        //const { session } = this.props;
-        //this.sendsayInstance.setSession(session); //установка сессии из куки
-        //console.log('AuthForm -> check -> this.sendsay', this.sendsayInstance)
-        console.log(this.page);
-        this.page.current.requestFullscreen();
-        setTimeout(()=>{
-            console.log('ApiConsolePage -> check -> document.webkitExitFullscreen();')
-            document.webkitExitFullscreen();
-            
-        }, 3000);
+
+    onChangeDispayingText = (text) => {
+        const formatText = formatingByDisplay(text);
+        this.setState({
+            displayingText: formatText,
+        })
+    }
+
+    onSendAction = (currentAction) => {
+        const { session, dispatch } = this.props;
+        this.sendsayInstance.setSession(session);
+
+        if (isValidJson(currentAction)) {
+            try {
+                const requestParams = JSON.parse(currentAction);
+                dispatch(sendRequest(this.sendsayInstance, requestParams));
+            } catch (err) {
+                console.error(err)
+            }
+        } else {
+            this.setState({
+                isWarning: true,
+            });
+        }
     }
 
     onFullScreenChange = async () => {
@@ -51,10 +65,7 @@ class ApiConsolePage extends Component {
     }
 
     render() {
-        const { session } = this.props;
-        const { isFullScreen } = this.state;
-
-        this.sendsayInstance.setSession(session);
+        const { isFullScreen, displayingText } = this.state;
 
         return (
             <div ref={this.page} className='ApiConsolePage'>
@@ -63,9 +74,14 @@ class ApiConsolePage extends Component {
                     onFullScreenChange={this.onFullScreenChange}
                     isFullScreen={isFullScreen}
                 />
-                <HistoryPanel />
+                <HistoryPanel
+                    onChangeDispayingText={this.onChangeDispayingText}
+                    onSendAction={this.onSendAction}
+                />
                 <RequestPanel
-                    sendsayInstance={this.sendsayInstance}
+                    displayingText={displayingText}
+                    onChangeDispayingText={this.onChangeDispayingText}
+                    onSendAction={this.onSendAction}
                 />
             </div>
         )

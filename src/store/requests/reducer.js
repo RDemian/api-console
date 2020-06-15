@@ -12,6 +12,10 @@ export default function reducer(state = initialState, action) {
     switch(type) {
         case TYPES.REQUEST_HISTORY_SET:
             return { ...state, ...payload }
+        case TYPES.REQUEST_HISTORY_CLEAR:
+            return { ...state, ...payload }
+        case TYPES.REQUEST_HISTORY_DELETE:
+            return { ...state, ...payload }
         case TYPES.REQUEST_FETCH:
             return {...state, ...payload}
         case TYPES.REQUEST_SUCCESS:
