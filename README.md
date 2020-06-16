@@ -1,4 +1,5 @@
 "API-консолька" консоль для отправки запросов к Sendsay API. Проект на React с Redux.</br>
+https://upbeat-lamarr-55b12e.netlify.app/ - деплой</br>
 https://sendsay.ru/api/api.html - описание апи;
 
 Реализовано:
