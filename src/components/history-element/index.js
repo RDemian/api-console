@@ -7,7 +7,6 @@ import './styles.scss';
 
 class HistoryElement extends Component {
     static propTypes = {
-        id: PropTypes.number.isRequired,
         onCopy: PropTypes.func,
         onExecute: PropTypes.func,
         onDelete: PropTypes.func,
@@ -52,7 +51,7 @@ class HistoryElement extends Component {
     }
 
     render() {
-        const { id, onCopy, onExecute, onDelete, actionName, actionOk } = this.props;
+        const { onCopy, onExecute, onDelete, actionName, actionOk } = this.props;
         const { isDropOpen } = this.state;
         return (
             <div className={`HistoryElement`}>
