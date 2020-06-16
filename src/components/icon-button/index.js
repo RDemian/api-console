@@ -24,16 +24,18 @@ const IconButton = ({ Icon, text, firstText, onClick }) => {
     )
 }
 
+IconButton.defaultProps = {
+    Icon: null,
+    onClick: () => {},
+    firstText: false,
+    text: '',
+}
+
 IconButton.propTypes = {
     Icon: PropTypes.object,
     onClick: PropTypes.func,
     firstText: PropTypes.bool,
-}
-
-IconButton.defaultProps = {
-    onClick: () => {},
-    Icon: null,
-    firstText: false,
+    text: PropTypes.string,
 }
 
 export { IconButton };

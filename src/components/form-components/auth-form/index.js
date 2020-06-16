@@ -9,22 +9,22 @@ import './styles.scss';
 
 const ctrlList = [
     {
-        text:'Логин',
-        subtext:'',
-        name:'login',
-        type:'text',
+        text: 'Логин',
+        subtext: '',
+        name: 'login',
+        type: 'text',
     },
     {
-        text:'Сублогин',
-        subtext:'Опционально',
-        name:'sublogin',
-        type:'text',
+        text: 'Сублогин',
+        subtext: 'Опционально',
+        name: 'sublogin',
+        type: 'text',
     },
     {
-        text:'Пароль',
-        subtext:'',
-        name:'password',
-        type:'password',
+        text: 'Пароль',
+        subtext: '',
+        name: 'password',
+        type: 'password',
     },
 ];
 
@@ -32,16 +32,18 @@ class AuthForm extends React.Component {
     static propTypes = {
         onLogin: PropTypes.func,
         fetching: PropTypes.bool,
+        fetchError: PropTypes.object,
     };
 
     static defaultProps = {
         onLogin: () => {},
         fetching: false,
+        fetchError: {}
     };
 
     constructor(props) {
         super(props);
-        
+
         const createState = () => {
             const stateObj = {};
             ctrlList.forEach((item) => {
@@ -50,20 +52,20 @@ class AuthForm extends React.Component {
                     isValid: true,
                 };
             })
-    
+
             return stateObj;
         }
-    
+
         this.state = createState();
         this.sendsay = new Sendsay();
     }
 
     isLoginValid(value) {
         console.log("AuthForm -> isLoginValid -> value=", value)
-        const reg = /^[a-zA-Z0-9@\_\.]+$/;
+        const reg = /^[a-zA-Z0-9@_.]+$/;
         const res = reg.test(value);
         console.log("AuthForm -> isLoginValid -> res=", res)
-        this.setState(state=>({
+        this.setState(state => ({
             login: {
                 value: state.login.value,
                 isValid: res,
@@ -73,7 +75,7 @@ class AuthForm extends React.Component {
     }
 
     isPasswordValid(value) {
-        const reg = /^[a-zA-Z0-9-\_\.\ ]+$/;
+        const reg = /^[a-zA-Z0-9-_. ]+$/;
         const res = reg.test(value);
         this.setState(state => ({
             password: {
@@ -83,7 +85,7 @@ class AuthForm extends React.Component {
         }))
         return res;
     }
-    
+
     onInputChange = (name, ev) => {
         this.setState({
             [name]: {
@@ -124,7 +126,7 @@ class AuthForm extends React.Component {
                         </div>
                     }
 
-                    {ctrlList.map((item, index)=>{
+                    {ctrlList.map((item, index) => {
                         return (
                             <div key={index} className='AuthForm__ctrl-wrap'>
                                 <CtrlLabel
@@ -135,9 +137,10 @@ class AuthForm extends React.Component {
                                 />
                                 <CtrlInput
                                     id={item.name}
+                                    type={item.type}
                                     name={item.name}
                                     currentValue={state[item.name].value}
-                                    onChange={(ev)=>this.onInputChange(item.name, ev)}
+                                    onChange={(ev) => this.onInputChange(item.name, ev)}
                                     isWarning={!state[item.name].isValid}
                                 />
                             </div>

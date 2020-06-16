@@ -7,11 +7,18 @@ import './styles.scss';
 
 class HistoryElement extends Component {
     static propTypes = {
+        id: PropTypes.number.isRequired,
         onCopy: PropTypes.func,
+        onExecute: PropTypes.func,
+        onDelete: PropTypes.func,
+        actionName: PropTypes.string.isRequired,
+        actionOk: PropTypes.bool.isRequired,
     }
 
     static defaultProps = {
-        onCopy: () => { },
+        onCopy: () => {},
+        onExecute:  () => {},
+        onDelete:  () => {},
     }
 
     state = {

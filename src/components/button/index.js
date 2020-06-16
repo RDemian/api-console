@@ -25,12 +25,14 @@ Button.propTypes = {
     children: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
+    isLoading: PropTypes.bool,
 }
 
 Button.defaultProps = {
     type: 'button',
     onClick: () => {},
     disabled: false,
+    isLoading: false,
     children: null,
 }
 

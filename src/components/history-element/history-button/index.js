@@ -17,10 +17,12 @@ const HistoryButton = ({ onClick, actionName, isWrong }) => {
 HistoryButton.propTypes = {
     actionName: PropTypes.string.isRequired,
     onClick: PropTypes.func,
+    isWrong: PropTypes.bool,
 }
 
 HistoryButton.defaultProps = {
     onClick: ()=>{},
+    isWrong: false,
 }
 
 export { HistoryButton };

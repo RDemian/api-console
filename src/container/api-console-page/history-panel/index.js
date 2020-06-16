@@ -8,12 +8,18 @@ import { ReactComponent as IconCross } from '../../../assets/image/svg/icon-cros
 import './styles.scss';
 
 class HystoryPanel extends Component {
-    static propTypes = {
-        onChangeDispayingText: PropTypes.func,
-    }
-
     static defaultProps = {
         onChangeDispayingText: () => {},
+        dispatch: ()=>{},
+        onSendAction: ()=>{}, 
+        requestActions: [],
+    }
+
+    static propTypes = {
+        onChangeDispayingText: PropTypes.func,
+        dispatch: PropTypes.func,
+        onSendAction: PropTypes.func,
+        requestActions: PropTypes.array,
     }
 
     lisfWrapRef = React.createRef();

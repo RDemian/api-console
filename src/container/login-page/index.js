@@ -10,10 +10,16 @@ import './styles.scss';
 class LoginPage extends React.Component {
     static defaultProps = {
         session: null,
+        dispatch: ()=>{},
+        fetching: false,
+        fetchError: {},
     };
 
     static propTypes = {
         session: PropTypes.string,
+        dispatch: PropTypes.func,
+        fetching: PropTypes.bool,
+        fetchError: PropTypes.object,
     };
 
     onLogin = (params) => {
@@ -40,7 +46,7 @@ class LoginPage extends React.Component {
 
                     <Link
                         href='https://github.com/RDemian'
-                        text='@link-to-your-github'
+                        text='https://github.com/RDemian'
                     />
 
                 </div>

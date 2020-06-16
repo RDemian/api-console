@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { CommandPanel } from './command-panel';
@@ -9,6 +10,22 @@ import './styles.scss';
 const PANEL_WIDTH_KOEFF = 'panel_width_koeff';
 
 class RequestPanel extends React.Component {
+    static defaultProps = {
+        lastResponse: {},
+        fetching: false,
+        onChangeDispayingText: ()=>{},
+        onSendAction: ()=>{},
+        displayingText: '',
+    }
+
+    static propTypes = {
+        lastResponse: PropTypes.object,
+        fetching: PropTypes.bool,
+        onChangeDispayingText: PropTypes.func,
+        onSendAction: PropTypes.func,
+        displayingText: PropTypes.string,
+    }
+
     leftFieldRef = React.createRef();
     rightFieldRef = React.createRef();
     editorRef = React.createRef();
@@ -91,7 +108,7 @@ class RequestPanel extends React.Component {
         }
     }
 
-    onValueChange = (ev) => {
+    onValueChange = () => {
         const editField = this.editFieldRef?.current?.innerHTML;
         const currContent = delSpaces(clearHTMLTags(editField));
         this.setState({
@@ -101,7 +118,7 @@ class RequestPanel extends React.Component {
     }
 
     onFormating = () => {
-        const { onChangeDispayingText} = this.props;
+        const { onChangeDispayingText } = this.props;
         const { currContent } = this.state;
 
         if (isValidJson(currContent)) {

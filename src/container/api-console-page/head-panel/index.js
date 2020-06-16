@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Logo } from '../../../components/logo';
 import { IconButton } from '../../../components/icon-button';
@@ -10,6 +11,24 @@ import { ReactComponent as IconBase } from '../../../assets/image/svg/icon-base-
 import './styles.scss';
 
 class HeadPanel extends React.Component {
+    static defaultProps = {
+        session: '',
+        dispatch: ()=>{},
+        sendsayInstance: {},
+        isFullScreen: false,
+        user: {},
+        onFullScreenChange: ()=>{},
+    }
+
+    static propTypes = {
+        dispatch: PropTypes.func,
+        sendsayInstance: PropTypes.object,
+        session: PropTypes.string,
+        isFullScreen: PropTypes.bool,
+        user: PropTypes.object,
+        onFullScreenChange: PropTypes.func,
+    }
+
     componentDidMount = async() => {
         const { dispatch, sendsayInstance, session } = this.props;
         sendsayInstance.setSession(session);

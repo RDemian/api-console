@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import HeadPanel from './head-panel';
 import HistoryPanel from './history-panel';
@@ -9,6 +10,16 @@ import Sendsay from 'sendsay-api';
 import './styles.scss';
 
 class ApiConsolePage extends Component {
+    static defaultProps = {
+        session: '',
+        dispatch: ()=>{},
+    }
+
+    static propTypes = {
+        dispatch: PropTypes.func,
+        session: PropTypes.string,
+    }
+
     constructor(props) {
         super(props);
         this.sendsayInstance = new Sendsay();
