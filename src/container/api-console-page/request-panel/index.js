@@ -40,7 +40,7 @@ class RequestPanel extends React.Component {
 
     componentDidMount() {
         const koeff = localStorage.getItem(PANEL_WIDTH_KOEFF);
-        this.setWidthByKoeff(koeff);
+        this.setWidthByKoeff(koeff || 1);
     }
 
     getEditorWidth() {
