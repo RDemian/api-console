@@ -59,7 +59,6 @@ export function logout(sendsayInstance) {
 
         try {
             const result = await sendsayInstance.request({ action: 'logout', });
-            console.log("logout -> result=", result)
             dispatch({
                 type: TYPES.LOGOUT_SUCCESS,
                 payload: {
