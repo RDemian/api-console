@@ -61,10 +61,8 @@ class AuthForm extends React.Component {
     }
 
     isLoginValid(value) {
-        console.log("AuthForm -> isLoginValid -> value=", value)
         const reg = /^[a-zA-Z0-9@_.]+$/;
         const res = reg.test(value);
-        console.log("AuthForm -> isLoginValid -> res=", res)
         this.setState(state => ({
             login: {
                 value: state.login.value,
