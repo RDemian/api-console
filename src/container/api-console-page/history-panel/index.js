@@ -29,12 +29,10 @@ class HystoryPanel extends Component {
         dispatch(setRequestHistory());
     }
 
-    getActionById(id) {
+    getActionByName(actionName) {
         const { requestActions } = this.props;
-        const jsonObj = requestActions[id];
-        delete (jsonObj.ok);
-        delete (jsonObj.err);
-        return JSON.stringify(jsonObj);
+        const jsonObj = requestActions.find(item => item.action === actionName);
+        return jsonObj;
     }
 
     onListWheel = (event) => {
@@ -47,21 +45,21 @@ class HystoryPanel extends Component {
         dispatch(clearRequestHistory());
     }
 
-    onCopy = (id) => {
+    onCopy = (actionName) => {
         const { onChangeDispayingText } =this.props;
-        onChangeDispayingText(this.getActionById(id));
+        onChangeDispayingText(this.getActionByName(actionName));
     }
 
-    onExecute = (id) => {
+    onExecute = (actionName) => {
         const { onChangeDispayingText, onSendAction } = this.props;
-        const currentAction = this.getActionById(id);
+        const currentAction = this.getActionByName(actionName);
         onSendAction(currentAction);
         onChangeDispayingText(currentAction);
     }
 
-    onDelete = (id) => {
+    onDelete = (actionName) => {
         const { dispatch } = this.props;
-        dispatch(deleteRequestFromHistory(id));
+        dispatch(deleteRequestFromHistory(actionName));
     }
 
     render() {
@@ -70,16 +68,15 @@ class HystoryPanel extends Component {
             <div className="HystoryPanel">
                 <div className="HystoryPanel__list-wrap" ref={this.lisfWrapRef}>
                     <ul className="HystoryPanel__list" onWheel={this.onListWheel}>
-                        {requestActions.map( (request, index) => {
+                        {requestActions.map( request => {
                             return (
-                                <li key={index} className="HystoryPanel__item">
+                                <li key={request.action} className="HystoryPanel__item">
                                     <HistoryElement
-                                        id={index}
                                         actionName={request.action}
                                         actionOk={request.ok}
-                                        onCopy={()=>this.onCopy(index)}
-                                        onExecute={()=>this.onExecute(index)}
-                                        onDelete={()=>this.onDelete(index)}
+                                        onCopy={()=>this.onCopy(request.action)}
+                                        onExecute={()=>this.onExecute(request.action)}
+                                        onDelete={()=>this.onDelete(request.action)}
                                     />
                                 </li>
                             )

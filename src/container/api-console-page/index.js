@@ -31,8 +31,13 @@ class ApiConsolePage extends Component {
         }
     }
 
-    onChangeDispayingText = (text) => {
-        const formatText = formatingByDisplay(text);
+    onChangeDispayingText = (currentAction) => {
+        const displayObj = {
+          ...currentAction,  
+        };
+        delete(displayObj.ok);
+        delete(displayObj.err);
+        const formatText = formatingByDisplay(JSON.stringify(displayObj));
         this.setState({
             displayingText: formatText,
         })
@@ -42,9 +47,9 @@ class ApiConsolePage extends Component {
         const { session, dispatch } = this.props;
         this.sendsayInstance.setSession(session);
 
-        if (isValidJson(currentAction)) {
+        if (isValidJson(JSON.stringify(currentAction))) {
             try {
-                const requestParams = JSON.parse(currentAction);
+                const requestParams = currentAction;
                 dispatch(sendRequest(this.sendsayInstance, requestParams));
             } catch (err) {
                 console.error(err)

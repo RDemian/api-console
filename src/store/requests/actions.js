@@ -27,7 +27,7 @@ export function sendRequest(sendsayInstance, params) {
         const { requests } = getState();
         const tempArr = getFilterActions(params.action, requests.actions);
         const newActions = [params, ...tempArr].slice(0, HISTORY_LENGTH);
-
+        
         try {
             const result = await sendsayInstance.request(params);
 
@@ -58,10 +58,10 @@ export function sendRequest(sendsayInstance, params) {
     }
 }
 
-export function deleteRequestFromHistory(id) {
+export function deleteRequestFromHistory(actionName) {
     return async (dispatch, getState) => {
         const { requests } = getState();
-        const newActions = requests.actions.filter((_, index) => index !== id);
+        const newActions = requests.actions.filter((item) => item.action !== actionName);
         
         dispatch({
             type: TYPES.REQUEST_HISTORY_DELETE,

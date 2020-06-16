@@ -59,7 +59,7 @@ class HistoryElement extends Component {
                 <HistoryButton
                     className={`HistoryElement__btn`}
                     actionName={actionName}
-                    onClick={() => this.onActionClick(onCopy, id)}
+                    onClick={() => this.onActionClick(onCopy, actionName)}
                     onDrop={this.onDropToggle}
                     isWrong={!actionOk}
                 />
@@ -67,7 +67,7 @@ class HistoryElement extends Component {
                     <div className={`HistoryElement__drop-list`}>
                         <div className={`HistoryElement__drop-btn-wrap`}>
                             <DropButton onClick={() => this.onActionClick(onExecute)} actionName='Выполнить' />
-                            <DropButton onClick={() => this.onActionClick(onCopy, id)} actionName='Скопировать' />
+                            <DropButton onClick={() => this.onActionClick(onCopy, actionName)} actionName='Скопировать' />
                         </div>
                         <div className={`HistoryElement__drop-btn-wrap`}>
                             <DropButton onClick={() => this.onActionClick(onDelete, actionName)} actionName='Удалить' isDestruct={true} />
