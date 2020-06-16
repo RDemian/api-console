@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import omit from 'lodash/omit';
 import HeadPanel from './head-panel';
 import HistoryPanel from './history-panel';
 import RequestPanel from './request-panel';
@@ -32,11 +33,7 @@ class ApiConsolePage extends Component {
     }
 
     onChangeDispayingText = (currentAction) => {
-        const displayObj = {
-          ...currentAction,  
-        };
-        delete(displayObj.ok);
-        delete(displayObj.err);
+        const displayObj = omit(currentAction, ['ok','key']);
         const formatText = formatingByDisplay(JSON.stringify(displayObj));
         this.setState({
             displayingText: formatText,
