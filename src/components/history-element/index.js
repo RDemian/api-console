@@ -59,7 +59,8 @@ class HistoryElement extends Component {
                 <HistoryButton
                     className={`HistoryElement__btn`}
                     actionName={actionName}
-                    onClick={this.onDropToggle}
+                    onClick={() => this.onActionClick(onCopy, id)}
+                    onDrop={this.onDropToggle}
                     isWrong={!actionOk}
                 />
                 {isDropOpen &&
