@@ -1,0 +1,9 @@
+@import '../../assets/styles/theme.scss';
+
+.App {
+    box-sizing: border-box;
+    height: 100vh;
+    min-width: 640px;
+    overflow: hidden;
+    color: $text-prime-color;
+}

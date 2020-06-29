@@ -1,0 +1,41 @@
+@import '../../assets/styles/theme.scss';
+
+.EditableField {
+    flex: 1 1 200px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border-radius: 5px;
+    border: 1px solid $border-color;
+
+    &_warning {
+        border: 1px solid $wrong-color;
+    }
+
+    &__ctrl {
+        height: auto;
+        min-height: 100%;
+        padding: 10px;
+        font-family: 'FiraCode', sans-serif;
+        font-weight: normal;
+        font-size: 14px !important;
+        line-height: 1.26 !important;
+        color: $text-prime-color !important;
+        background-color: transparent !important;
+        border-radius: 5px;
+        overflow: hidden;
+
+        &:focus {
+            outline: none;
+        }
+
+        * {
+            width: 100%;
+            font-size: 14px !important;
+            line-height: 1.26 !important;
+            color: $text-prime-color !important;
+            background-color: transparent !important;
+            overflow: hidden;
+        }
+    }
+}
