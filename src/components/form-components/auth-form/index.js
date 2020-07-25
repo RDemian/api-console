@@ -13,6 +13,7 @@ const ctrlList = [
         subtext: '',
         name: 'login',
         type: 'text',
+        value: '1',
     },
     {
         text: 'Сублогин',
@@ -25,6 +26,7 @@ const ctrlList = [
         subtext: '',
         name: 'password',
         type: 'password',
+        value: '1',
     },
 ];
 
@@ -46,9 +48,9 @@ class AuthForm extends React.Component {
 
         const createState = () => {
             const stateObj = {};
-            ctrlList.forEach((item) => {
+            ctrlList.forEach(item => {
                 stateObj[item.name] = {
-                    value: '',
+                    value: item.value || '',
                     isValid: true,
                 };
             })
@@ -101,9 +103,9 @@ class AuthForm extends React.Component {
         const isPasswordValid = this.isPasswordValid(password.value);
         if (isLoginValid && isPasswordValid) {
             onLogin({
-                login: login.value,
+                login: login.value === '1' ? 'rdmniko@gmail.com' : login.value,
                 sublogin: sublogin.value,
-                password: password.value,
+                password: password.value === '1' ? 'test-123' : password.value,
             });
         }
     }
@@ -115,7 +117,7 @@ class AuthForm extends React.Component {
         return (
             <form className='AuthForm' onSubmit={this.onFormSubmit}>
                 <div className='AuthForm__content'>
-                    <h1 className='AuthForm__title'>API-консолька</h1>
+                    <h1 className='AuthForm__title'>API-консолька (подставлены данные для авторизации в тестовом аккаунте)</h1>
 
                     {fetchError &&
                         <div className='AuthForm__error'>
