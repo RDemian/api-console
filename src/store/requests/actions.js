@@ -1,5 +1,6 @@
 const HISTORY_LENGTH = 15;
 export const STORAGE_HISTORY_NAME = 'action_history';
+const TEST_HYSTORY = [{action: "sys.user.rights.get", id: "2", ok: true}, {action: "ping", ok: true}];
 
 export const TYPES = {
     REQUEST_HISTORY_SET: 'REQUEST_HISTORY_SET',
@@ -14,7 +15,7 @@ const getFilterActions = (currentAction, actions) => {
     return actions.filter(item => item.action !== currentAction);
 }
 
-export function sendRequest(sendsayInstance, params) {
+export function sendRequest(sendsayInstance, paramsStr) {
     return async(dispatch, getState) => {
         dispatch({
             type: TYPES.REQUEST_FETCH,
@@ -23,7 +24,8 @@ export function sendRequest(sendsayInstance, params) {
                 fetchError: null,
             },
         })
-
+        
+        const params = JSON.parse(paramsStr);
         const { requests } = getState();
         const tempArr = getFilterActions(params.action, requests.actions);
         const newActions = [params, ...tempArr].slice(0, HISTORY_LENGTH);
@@ -91,7 +93,8 @@ export function clearRequestHistory() {
 export function setRequestHistory() {
     return async (dispatch) => {
         const storageItem = localStorage.getItem(STORAGE_HISTORY_NAME);
-        const historyActions = storageItem ? await JSON.parse(storageItem) : [];
+        
+        const historyActions = storageItem ? await JSON.parse(storageItem) : TEST_HYSTORY;
         
         dispatch ({
             type: TYPES.REQUEST_HISTORY_SET,

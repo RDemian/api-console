@@ -122,7 +122,7 @@ class RequestPanel extends React.Component {
         const { currContent } = this.state;
 
         if (isValidJson(currContent)) {
-            onChangeDispayingText(currContent);
+            onChangeDispayingText(JSON.parse(currContent));
         } else {
             this.setState({
                 isWarning: true,
